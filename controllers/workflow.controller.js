@@ -29,7 +29,10 @@ export const sendReminders = serve(async (context) => {
             await sleepUntillReminder(context, `Reminder-${daysBefore} Days Before`, reminderDate);
         }
 
-        await triggerReminder(context, `${daysBefore} Days Before Reminder`, subscription);
+        if(dayjs().isSame(reminderDate, "day" )){
+            await triggerReminder(context, `${daysBefore} Days Before Reminder`, subscription);
+        }
+
     }
 });
 
@@ -41,8 +44,7 @@ const fetchSubscription = async (context, subscriptionId) => {
 
 const sleepUntillReminder = async (context, label, date) => {
     console.log(`Sleeping Untill ${label} Reminder At ${date}`);
-    // ❌ wrong: context.sleepUntill
-    // ✅ fixed spelling:
+
     await context.sleepUntil(label, date.toDate());
 };
 
